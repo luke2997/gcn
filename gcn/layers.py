@@ -27,13 +27,15 @@ def sparse_dropout(x, keep_prob, noise_shape):
     return pre_out * (1./keep_prob)
 
 
-def dot(x, y, sparse=False):
+def dot(x, y, k, sparse=False):
     """Wrapper for tf.matmul (sparse vs dense)."""
     if sparse:
         res = tf.sparse_tensor_dense_matmul(x, y)
-    else:
-        res = tf.matmul(x, y)
-    return res
+    else: 
+        del x[k-1::k]
+        del y[k-1::k] 
+    return tf.matmul(x, y)
+
 
 
 class Layer(object):
